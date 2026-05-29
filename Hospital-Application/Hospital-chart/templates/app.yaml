@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hospital
+spec:
+  replicas: {{ .Values.app.replicas }}
+  selector:
+    matchLabels:
+      app: hospital
+  template:
+    metadata:
+      labels:
+        app: hospital
+    spec:
+      containers:
+        - name: hospital
+          image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.app.containerPort }}
+          envFrom:
+            - configMapRef:
+                name: hospital-configmap
+            - secretRef:
+                name: hospital-secret
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.app.containerPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hospital-service
+spec:
+  type: {{ .Values.app.service.type }}
+  selector:
+    app: hospital
+  ports:
+    - port: {{ .Values.app.service.port }}
+      targetPort: {{ .Values.app.containerPort }}
