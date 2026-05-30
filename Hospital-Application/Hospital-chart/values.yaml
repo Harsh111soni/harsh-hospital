@@ -23,6 +23,6 @@ secret:
 
 mongodb:
   image: "mongo:7-jammy"
-  storageClass: "gp2"
+  storageClass: "gp3"
   storageSize: "5Gi"
   port: 27017

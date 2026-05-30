@@ -11,7 +11,7 @@ iam:
   withOIDC: true
 managedNodeGroups:
   - name: ng-workers
-    instanceType: t3.micro
+    instanceType: t3.small
     desiredCapacity: 1
     minSize: 1
     maxSize: 2
